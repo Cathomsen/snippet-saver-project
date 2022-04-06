@@ -41,15 +41,17 @@ export default function SnippetPage() {
     <>
       <div className="space-y-5">
         <div className="flex space-x-10">
-          <h1 className="text-2xl font-bold mb-4">{snippet.title}</h1>
-          <p className="">{snippet.language}</p>
+          <h1 className="text-2xl font-bold py-3">{snippet.title}</h1>
+          <p className="bg-slate-100 rounded-lg py-4 px-3 font-medium">
+            {snippet.language}
+          </p>
           <form method="POST">
             <input type="hidden" name="_method" value="favorite" />
             <button type="submit">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
-                fill={snippet.favorite ? "currentColor" : "none"}
+                fill={snippet.favorite ? "yellow" : "none"}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={2}
@@ -62,7 +64,7 @@ export default function SnippetPage() {
               </svg>
             </button>
           </form>
-          <p>
+          <p className="py-3 flex-1 text-right font-medium">
             {date}.{month}.{year}
           </p>
         </div>

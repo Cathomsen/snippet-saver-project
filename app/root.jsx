@@ -32,14 +32,14 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-slate-100 text-slate-800 font-sans p-4">
-        <header className="pb-3 mb-4 border-b-2">
+        {/*  <header className="pb-3 mb-4 border-b-2">
           <Link to="/" className="hover:underline text-blue-600">
             Home
           </Link>
           <Link to="/snippets/new" className="hover:underline text-blue-600">
             New Snippet
           </Link>
-        </header>
+        </header> */}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
