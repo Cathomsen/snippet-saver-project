@@ -50,9 +50,12 @@ export default function SnippetUpdate() {
   const snippet = useLoaderData();
   return (
     <div>
-      <h1>Update current snippet</h1>
+      <h1 className="text-2xl font-bold mb-4">Update current snippet</h1>
       <Form method="post">
-        <label htmlFor="title" className="block">
+        <label
+          htmlFor="title"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Title
         </label>
         <input
@@ -60,15 +63,16 @@ export default function SnippetUpdate() {
           name="title"
           defaultValue={actionData?.values.title ?? snippet.title}
           id="title"
-          className={
-            actionData?.errors.title ? "border-2 border-red-500" : null
-          }
+          className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
         {actionData?.errors.title && (
           <p className="text-red-500">{actionData.errors.title.message}</p>
         )}
 
-        <label htmlFor="language" className="block">
+        <label
+          htmlFor="language"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Language
         </label>
         <input
@@ -76,11 +80,12 @@ export default function SnippetUpdate() {
           name="language"
           defaultValue={actionData?.values.language ?? snippet.language}
           id="language"
-          className={
-            actionData?.errors.language ? "border-2 border-red-500" : null
-          }
+          className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        <label htmlFor="description" className="block">
+        <label
+          htmlFor="description"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Description
         </label>
         <input
@@ -88,11 +93,12 @@ export default function SnippetUpdate() {
           name="description"
           defaultValue={actionData?.values.description ?? snippet.description}
           id="description"
-          className={
-            actionData?.errors.description ? "border-2 border-red-500" : null
-          }
+          className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        <label htmlFor="snippet" className="block">
+        <label
+          htmlFor="snippet"
+          className="block mb-2 font-medium text-gray-900 dark:text-gray-300"
+        >
           Snippet
         </label>
         <textarea
@@ -100,14 +106,15 @@ export default function SnippetUpdate() {
           name="snippet"
           defaultValue={actionData?.values.snippet ?? snippet.snippet}
           id="snippet"
-          className={
-            actionData?.errors.snippet
-              ? "border-2 border-red-500 resize-y"
-              : null
-          }
+          className="bg-slate-100 text-gray-900 rounded-lg focus:shadow focus:outline-none block w-7/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-y"
         />
         <br />
-        <button type="submit">Save</button>
+        <button
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Save
+        </button>
       </Form>
     </div>
   );

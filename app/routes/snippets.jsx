@@ -46,7 +46,7 @@ export default function Snippet() {
           }}
         >
           <select
-            className="mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 pr-2"
             name="s"
             id="s"
           >
@@ -70,17 +70,17 @@ export default function Snippet() {
             autoComplete="off"
             name="q"
             type="search"
-            className="w-full mb-1"
+            className="w-full pr-8 pl-5 px-4 py-2.5 rounded-lg z-0 focus:shadow focus:outline-none text-sm bg-slate-100 mt-3 mb-5"
             placeholder="Search snippet"
           />
         </form>
-        <ul className="ml-5 list-disc">
+        <ul className=" list-none w-full text-sm font-medium text-gray-900 bg-white border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
           {snippets.map((snippet) => {
             return (
               <li key={snippet._id}>
                 <Link
                   to={`/snippets/${snippet._id}${location.search}`}
-                  className="text-blue-600 hover:underline"
+                  className="text-base block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
                 >
                   {snippet.title}
                 </Link>

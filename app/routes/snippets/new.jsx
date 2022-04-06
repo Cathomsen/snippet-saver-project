@@ -25,24 +25,30 @@ export default function CreateSnippet() {
   const actionData = useActionData();
   return (
     <div>
-      <h1>Create snippet</h1>
+      <h1 className="text-2xl font-bold mb-4">Create snippet</h1>
       <Form method="post">
-        <label htmlFor="title" className="block">
-          Title
-        </label>
-        <input
-          type="text"
-          name="title"
-          defaultValue={actionData?.values.title}
-          id="title"
-          className={
-            actionData?.errors.title ? "border-2 border-red-500" : null
-          }
-        />
+        <div>
+          <label
+            htmlFor="title"
+            className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+          >
+            Title
+          </label>
+          <input
+            type="text"
+            name="title"
+            defaultValue={actionData?.values.title}
+            id="title"
+            className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+        </div>
         {actionData?.errors.title && (
           <p className="text-red-500">{actionData.errors.title.message}</p>
         )}
-        <label htmlFor="language" className="block">
+        <label
+          htmlFor="language"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Language
         </label>
         <input
@@ -50,11 +56,12 @@ export default function CreateSnippet() {
           name="language"
           defaultValue={actionData?.values.language}
           id="language"
-          className={
-            actionData?.errors.language ? "border-2 border-red-500" : null
-          }
+          className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        <label htmlFor="description" className="block">
+        <label
+          htmlFor="description"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Description
         </label>
         <input
@@ -62,13 +69,12 @@ export default function CreateSnippet() {
           name="description"
           defaultValue={actionData?.values.description}
           id="description"
-          className={
-            actionData?.errors.description
-              ? "border-2 border-red-500 resize-y"
-              : null
-          }
+          className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        <label htmlFor="snippet" className="block">
+        <label
+          htmlFor="snippet"
+          className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
+        >
           Snippet
         </label>
         <textarea
@@ -76,12 +82,15 @@ export default function CreateSnippet() {
           name="snippet"
           defaultValue={actionData?.values.snippet}
           id="snippet"
-          className={
-            actionData?.errors.snippet ? "border-2 border-red-500" : null
-          }
+          className="bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-7/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
         <br />
-        <button type="submit">Save</button>
+        <button
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Save
+        </button>
       </Form>
     </div>
   );
