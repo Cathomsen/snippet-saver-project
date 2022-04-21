@@ -1,5 +1,5 @@
 import { createCookieSessionStorage } from "remix";
-import { sessionCookie } from "../cookies";
+import { sessionCookie } from "./cookies";
 
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({ cookie: sessionCookie });
