@@ -53,7 +53,12 @@ const userSchema = new Schema({
     required: true,
     minLength: [3, "Please write more. Too short"],
   },
-  snippets: [{ type: Schema.Types.ObjectId, ref: "Snippet" }],
+  snippets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Snippet",
+    },
+  ],
 });
 
 export const models = [

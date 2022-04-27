@@ -1,6 +1,6 @@
 import { useLoaderData, json, useCatch, Link, redirect } from "remix";
 import connectDb from "~/db/connectDb.server.js";
-import { requireUserSession, getSession } from "~/sessions";
+import { requireUserSession, getSession } from "~/sessions.server";
 
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);

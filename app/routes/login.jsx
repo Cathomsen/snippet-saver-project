@@ -1,5 +1,5 @@
 import { Form, json, redirect, useActionData, useLoaderData } from "remix";
-import { commitSession, getSession } from "../sessions";
+import { commitSession, getSession } from "../sessions.server";
 import connectDb from "~/db/connectDb.server.js";
 import bcrypt from "bcryptjs";
 

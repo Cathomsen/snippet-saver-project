@@ -1,18 +1,13 @@
 import { Form, redirect, json, useActionData } from "remix";
 import connectDb from "~/db/connectDb.server";
-import { requireUserSession, getSession } from "~/sessions";
+import { requireUserSession, getSession } from "~/sessions.server";
 
 export async function action({ request }) {
   const form = await request.formData();
   const db = await connectDb();
-  /*   const session = await getSession(request.headers.get("Cookie"));
+  const session = await requireUserSession(request);
 
-    if (!session.has("userId")) {
-    return redirect("/login");
-  } */
-  await requireUserSession(request);
   try {
-    const session = await getSession(request.headers.get("Cookie"));
     const newSnippet = await db.models.Snippet.create({
       title: form.get("title"),
       language: form.get("language"),
@@ -30,12 +25,12 @@ export async function action({ request }) {
   }
 }
 
-export async function loader({ request }) {
+/* export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   return json({
     userId: session.get("userId"),
   });
-}
+} */
 
 export default function CreateSnippet() {
   const actionData = useActionData();
