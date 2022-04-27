@@ -1,15 +1,18 @@
 import { useLoaderData, json, useCatch, Link, redirect } from "remix";
 import connectDb from "~/db/connectDb.server.js";
+import { requireUserSession, getSession } from "~/sessions";
 
-export async function loader({ params }) {
+export async function loader({ params, request }) {
+  const session = await requireUserSession(request);
   const db = await connectDb();
   const snippet = await db.models.Snippet.findById(params.snippetId);
+  const verifyUser = session.get("userId") == snippet.userId;
   if (!snippet) {
     throw new Response(`Couldnt find snippet with id ${params.snippetId}`, {
       status: 404,
     });
   }
-  return json(snippet);
+  return json({ snippet, verifyUser });
 }
 
 //DELETE
@@ -32,7 +35,7 @@ export const action = async ({ request, params }) => {
 };
 
 export default function SnippetPage() {
-  const snippet = useLoaderData();
+  const { snippet, verifyUser } = useLoaderData();
   const showDate = new Date(snippet.dateAdded);
   const date = showDate.getDate();
   const month = showDate.getMonth() + 1;
@@ -75,20 +78,22 @@ export default function SnippetPage() {
         </div>
         <p className="resize-y">{snippet.description}</p>
       </div>
-      <div className="flex w-max space-x-5 mt-12">
-        <div className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-          <form method="POST">
-            <input type="hidden" name="_method" value="update" />
-            <Link to={`/snippets/update/${snippet._id}`}>Update Snippet</Link>
-          </form>
+      {verifyUser && (
+        <div className="flex w-max space-x-5 mt-12">
+          <div className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            <form method="POST">
+              <input type="hidden" name="_method" value="update" />
+              <Link to={`/snippets/update/${snippet._id}`}>Update Snippet</Link>
+            </form>
+          </div>
+          <div className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+            <form method="POST">
+              <input type="hidden" name="_method" value="delete" />
+              <button>Delete snippet</button>
+            </form>
+          </div>
         </div>
-        <div className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-          <form method="POST">
-            <input type="hidden" name="_method" value="delete" />
-            <button>Delete snippet</button>
-          </form>
-        </div>
-      </div>
+      )}
 
       <div>
         <form method="POST">

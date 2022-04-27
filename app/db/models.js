@@ -32,6 +32,10 @@ const snippetSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   }
   /* {
     timestamps: true,
@@ -49,6 +53,7 @@ const userSchema = new Schema({
     required: true,
     minLength: [3, "Please write more. Too short"],
   },
+  snippets: [{ type: Schema.Types.ObjectId, ref: "Snippet" }],
 });
 
 export const models = [
@@ -60,6 +65,6 @@ export const models = [
   {
     name: "User",
     schema: userSchema,
-    collection: "Users",
+    collection: "users",
   },
 ];

@@ -1,26 +1,42 @@
-import {
-  useLoaderData,
-  Form,
-  redirect,
-  json,
-  createCookie,
-  useActionData,
-} from "remix";
-import { sessionCookie } from "../cookies";
-import { getSession, commitSession } from "../session";
+import { Form, json, redirect, useActionData, useLoaderData } from "remix";
+import { commitSession, getSession } from "../sessions";
 import connectDb from "~/db/connectDb.server.js";
+import bcrypt from "bcryptjs";
 
-export async function action({ request }) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const formdata = await request.FormData();
+export const action = async ({ request }) => {
+  const form = await request.formData();
   const db = await connectDb();
-  session.set("userId", "1001");
-  return redirect("/login", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+
+  const user = await db.models.User.findOne({
+    username: form.get("username").trim(),
+    /* password: form.get("password").trim(), */
   });
-}
+
+  let isCorrectPassword = false;
+
+  if (user) {
+    isCorrectPassword = await bcrypt.compare(
+      form.get("password").trim(),
+      user.password
+    );
+  }
+
+  if (user && isCorrectPassword) {
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("userId", user._id);
+
+    return redirect("/snippets", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } else {
+    return json(
+      { errors: "hello", values: Object.fromEntries(form) },
+      { status: 401 }
+    );
+  }
+};
 
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -29,68 +45,59 @@ export async function loader({ request }) {
   });
 }
 
-export default function Login() {
+export default function LoginPage() {
   const { userId } = useLoaderData();
   const actionData = useActionData();
-  console.log(userId);
-  if (userId) {
-    return (
-      <div>
-        <p>Logged in</p>
-        <h2>Current cookies</h2>
-        <p>Cookie: {JSON.stringify(userId, null, 2)}</p>
-        <Form method="post" reloadDocument>
-          <button
-            type="submit"
-            name="login"
-            className="text-white bg-green-500 flex-1 text-center hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-500 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Login
-          </button>
-        </Form>
-        <Form method="post" action="/logout" reloadDocument>
-          <button type="submit">Logout</button>
-        </Form>
+
+  return (
+    <div>
+      <h1 className="font-bold pb-2">Log in</h1>
+      {userId && (
+        <pre className="inline-block bg-gray-200 rounded px-2 py-2 text-sm font-semibold text-gray-700 mb-2">
+          {JSON.stringify(userId)}
+        </pre>
+      )}
+      <div className="flex">
+        {!userId ? (
+          <Form method="post" className="pr-2" autoComplete="off">
+            <div className="flex flex-col">
+              <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Username"
+                className="mb-2"
+              />
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+              />
+            </div>
+            {actionData && (
+              <p className="text-red-500 text-xs">
+                User not found or password didn't match
+              </p>
+            )}
+            <button
+              type="submit"
+              className="text-xs bg-green-200 hover:bg-green-700 text-green-800 hover:text-green-200 font-bold py-1 px-2 rounded"
+            >
+              Login
+            </button>
+          </Form>
+        ) : (
+          <Form method="post" action="/logout">
+            <button
+              type="submit"
+              className="text-xs hover:bg-red-200 bg-red-700 hover:text-red-800 text-red-200 font-bold py-1 px-2 rounded"
+            >
+              Logout
+            </button>
+          </Form>
+        )}
       </div>
-    );
-  } else {
-    return (
-      <div className="bg-white rounded-lg">
-        <Form method="post" reloadDocument className="ml-5 p-5">
-          <label
-            htmlFor="username"
-            className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          <label
-            htmlFor="password"
-            className="block mb-2  font-medium text-gray-900 dark:text-gray-300"
-          >
-            Password
-          </label>
-          <input
-            type="text"
-            name="password"
-            id="password"
-            className="mb-4 bg-slate-100 text-gray-900  rounded-lg focus:shadow focus:outline-none block w-3/12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          <button
-            type="submit"
-            name="login"
-            className="text-white bg-green-500 flex-1 text-center hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-500 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Login
-          </button>
-        </Form>
-        <p></p>
-      </div>
-    );
-  }
+    </div>
+  );
 }

@@ -1,5 +1,5 @@
 import { redirect } from "remix";
-import { destroySession, getSession } from "../session";
+import { destroySession, getSession } from "../sessions";
 
 export async function action({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
